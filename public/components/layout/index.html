@@ -1,0 +1,111 @@
+<link rel="import" href="/lib/polymer/polymer.html">
+
+<polymer-element name="jin-layout" attributes="">
+  <template>
+    <style>
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input[type=text] { border: 0; padding: 10px; width: 80%; margin-right: .5%; }
+      form input[type=checkbox] { width: 9%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      pre { border-radius: 4px; padding: 6px; }
+      .profile { width: 40px; margin-right: 10px; vertical-align: middle; border-radius: 20px; }
+      li { font-size: 15px; }
+    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <template id="chat-message">
+      <h1>Okay</h1>
+      <!-- <li><strong>{{msg.user}}</strong>1<span>{{msg.body}}</span> <u>{{msg.type}}</u></li> -->
+    </template>
+    <template id="code-message">
+      <li><pre id="cid{{ cid }}" class="prettyprint linenums"><code class="lineNumbers">{{msg.body}}</code></pre>2</li>
+    </template>
+
+    <ul id="messages">
+    </ul>
+    <form>
+      <input type="text" id="m" value="{{msg}}" autocomplete="off" />
+      <input type="checkbox" id="c" on-click={{toogleLanguage}} />
+      <input type="submit" value="Send" />
+    </form>
+  </template>
+  <script>
+    (function () {
+      'use strict';
+      Polymer({
+        socket: io(),
+        nickname: '',
+        cid: 0,
+        msg: '',
+        chatMessages: [],
+
+        applyHighlight: function() {
+          $('#cid'+this.cid).each(function(i, block) {
+            hljs.highlightBlock(block);
+          });
+        },
+
+        toogleLanguage: function() {
+          if(this.$.c.checked) {
+            this.cid = Date.now();
+
+            this.chatMessages.push({
+              type: 'code',
+              user: this.nickname,
+              body: '/* code here ... */\n'
+            });
+
+            this.applyHighlight();
+          } else {
+            this.cid = 0;
+          }
+        },
+
+        msgChanged: function() {
+          if(this.msg[this.msg.length-1] == '~') {
+            this.socket.emit('chat message', this.nickname+'#'+this.msg);
+            this.msg = '';
+          }
+        },
+
+        ready: function() {
+          var $scope = this;
+
+          this.nickname = prompt('이름이 뭐에요?');
+
+          this.socket.on('chat message', function(data){
+            var chatTemplate = $scope.$['chat-message'];
+            var codeTemplate = $scope.$['code-message'];
+            var clone = document.importNode(chatTemplate.content, true);
+            var msg = data.split('#');
+            var type = !!$scope.cid ? 'code' : 'chat';
+
+            $scope.chatMessages.push({
+              type: type,
+              user: msg[0],
+              body: msg[1]
+            });
+
+
+            $scope.$.messages.appendChild(clone); // host
+
+            console.log(clone);
+            /*
+            if(!!this.cid) {
+              $('#cid'+this.cid+' code').append(msg[1]+'\n');
+
+              applyHighlight();
+            } else {
+
+              $('#messages').append($('<li><img class="profile" src="'+msg[0]+'">'+msg[1]+'</li>'));
+            }
+            */
+          });
+        }
+      });
+    })();
+  </script>
+  <script type="text/javascript" src="/js/jin.js"></script>
+</polymer-element>

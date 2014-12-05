@@ -1,0 +1,27 @@
+{
+  "name": "jin",
+  "version": "0.0.1",
+  "description": "just chatting app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ibare/jin.git"
+  },
+  "keywords": [
+    "chat",
+    "code"
+  ],
+  "author": "ibare77@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ibare/jin/issues"
+  },
+  "homepage": "https://github.com/ibare/jin",
+  "dependencies": {
+    "express": "4.10.2",
+    "socket.io": "1.2.0"
+  }
+}
