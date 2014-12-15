@@ -13,8 +13,6 @@
       .profile { width: 40px; margin-right: 10px; vertical-align: middle; border-radius: 20px; }
       li { font-size: 15px; }
     </style>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <template id="chat-message">
       <h1>Okay</h1>
       <!-- <li><strong>{{msg.user}}</strong>1<span>{{msg.body}}</span> <u>{{msg.type}}</u></li> -->
@@ -31,6 +29,9 @@
       <input type="submit" value="Send" />
     </form>
   </template>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/js/protocol.js"></script>
   <script>
     (function () {
       'use strict';
@@ -48,19 +49,23 @@
         },
 
         toogleLanguage: function() {
+          Protocol.create('chat', {
+            username: this.nickname,
+            type: 'code',
+            body: 'hahaha'
+          });
+
+          console.log(Protocol.chat.toString());
+
           if(this.$.c.checked) {
             this.cid = Date.now();
 
-            this.chatMessages.push({
-              type: 'code',
-              user: this.nickname,
-              body: '/* code here ... */\n'
-            });
-
-            this.applyHighlight();
+            this.socket.emit('chat message', this.nickname+'#'+'/* code here ... */\n');
           } else {
             this.cid = 0;
           }
+
+          console.log('cid: %d', this.cid);
         },
 
         msgChanged: function() {
@@ -88,24 +93,19 @@
               body: msg[1]
             });
 
-
             $scope.$.messages.appendChild(clone); // host
 
-            console.log(clone);
-            /*
             if(!!this.cid) {
               $('#cid'+this.cid+' code').append(msg[1]+'\n');
 
               applyHighlight();
             } else {
-
               $('#messages').append($('<li><img class="profile" src="'+msg[0]+'">'+msg[1]+'</li>'));
             }
-            */
+
           });
         }
       });
     })();
   </script>
-  <script type="text/javascript" src="/js/jin.js"></script>
 </polymer-element>
