@@ -49,14 +49,6 @@
         },
 
         toogleLanguage: function() {
-          Protocol.create('chat', {
-            username: this.nickname,
-            type: 'code',
-            body: 'hahaha'
-          });
-
-          console.log(Protocol.chat.toString());
-
           if(this.$.c.checked) {
             this.cid = Date.now();
 
@@ -64,13 +56,17 @@
           } else {
             this.cid = 0;
           }
-
-          console.log('cid: %d', this.cid);
         },
 
         msgChanged: function() {
+          var msg = Protocol.chat();
+
           if(this.msg[this.msg.length-1] == '~') {
-            this.socket.emit('chat message', this.nickname+'#'+this.msg);
+            msg.type = Protocol.chat.MESSAGE;
+            msg.username = this.nickname;
+            msg.body = this.msg;
+
+            this.socket.emit('chat message', msg);
             this.msg = '';
           }
         },
@@ -78,29 +74,35 @@
         ready: function() {
           var $scope = this;
 
+          Protocol.defineMessage('chat', {
+            username: String,
+            type: ['MESSAGE','CODE'],
+            cid: Number,
+            body: String
+          });
+
           this.nickname = prompt('이름이 뭐에요?');
 
-          this.socket.on('chat message', function(data){
+          this.socket.on('chat message', function(msg){
             var chatTemplate = $scope.$['chat-message'];
             var codeTemplate = $scope.$['code-message'];
             var clone = document.importNode(chatTemplate.content, true);
-            var msg = data.split('#');
-            var type = !!$scope.cid ? 'code' : 'chat';
+            var type = !!$scope.cid ? Protocol.chat.CODE : Protocol.chat.MESSAGE;
 
             $scope.chatMessages.push({
               type: type,
-              user: msg[0],
-              body: msg[1]
+              user: msg.username,
+              body: msg.body
             });
 
             $scope.$.messages.appendChild(clone); // host
 
             if(!!this.cid) {
-              $('#cid'+this.cid+' code').append(msg[1]+'\n');
+              $('#cid'+this.cid+' code').append(msg.body+'\n');
 
               applyHighlight();
             } else {
-              $('#messages').append($('<li><img class="profile" src="'+msg[0]+'">'+msg[1]+'</li>'));
+              $('#messages').append($('<li><img class="profile" src="'+msg.username+'">'+msg.body+'</li>'));
             }
 
           });

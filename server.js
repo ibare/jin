@@ -10,11 +10,11 @@ io.on('connection', function(socket){
   console.log('connection');
 
   socket.on('chat message', function(msg){
-    console.info(msg);
+    console.log(msg);
     io.emit('chat message', msg);
   });
 });
 
-http.listen(8080, function() {
+http.listen(process.env.PORT || 8080, function() {
   console.log('Jin server listening on *:8080');
 });
