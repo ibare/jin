@@ -14,6 +14,8 @@ Polymer({
   },
 
   toogleLanguage: function() {
+    console.log('this is toogle');
+
     if(this.$.c.checked) {
       this.cid = Date.now();
 

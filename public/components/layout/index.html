@@ -1,12 +1,16 @@
 <link rel="import" href="/lib/polymer/polymer.html">
+<link rel="import" href="/lib/core-media-query/core-media-query.html">
+<link rel="import" href="/lib/core-draw-panel/core-draw-panel.html">
+<link rel="import" href="/lib/core-header-panel/core-header-panel.html">
+<link rel="import" href="/lib/paper-input/paper-input.html">
+<link rel="import" href="/lib/paper-button/paper-button.html">
+<link rel="import" href="/lib/paper-checkbox/paper-checkbox.html">
 
 <polymer-element name="jin-layout" attributes="">
   <template>
     <style>
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input[type=text] { border: 0; padding: 10px; width: 80%; margin-right: .5%; }
-      form input[type=checkbox] { width: 9%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #bk { background-color: red; }
+      #chatbox { background: #fff; bottom: 0; width: 100%; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       pre { border-radius: 4px; padding: 6px; }
@@ -21,13 +25,19 @@
       <li><pre id="cid{{ cid }}" class="prettyprint linenums"><code class="lineNumbers">{{msg.body}}</code></pre>2</li>
     </template>
 
-    <ul id="messages">
-    </ul>
-    <form>
-      <input type="text" id="m" value="{{msg}}" autocomplete="off" />
-      <input type="checkbox" id="c" on-click={{toogleLanguage}} />
-      <input type="submit" value="Send" />
-    </form>
+    <div vertical layout fit>
+      <div flex>
+        <ul id="messages">
+          <li>haha</li>
+        </ul>
+      </div>
+      <div id="chatbox" horizontal layout center>
+        <div flex><paper-input id="m" floatingLabel="Typing... anyone" value="{{msg}}" style="width: 99%"></paper-input></div>
+        <div><paper-checkbox id="c" change="{{toogleLanguage}}"></paper-checkbox></div>
+        <div><paper-button>Send</paper-button></div>
+      </div>
+    </div>
+
   </template>
   <script type="text/javascript" src="layout.js"></script>
 </polymer-element>
