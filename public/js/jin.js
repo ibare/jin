@@ -8,13 +8,24 @@ var Jin = function() {
     });
   }
 
-  $('form').submit(function() {
-    socket.emit('chat message', nickname+'#'+$('#m').val());
-
-    $('#m').val('');
-    return false;
+  Protocol.defineMessage('chat', {
+    username: String,
+    type: ['MESSAGE','CODE'],
+    cid: Number,
+    body: String
   });
 
+  $('#chatbox').change(function() {
+    var msg = Protocol.chat();
+
+    msg.type = Protocol.chat.MESSAGE;
+    msg.username = nickname;
+    msg.body = $('#chatbox').val();
+
+    $('#chatbox').val('');
+
+    socket.emit('chat message', msg);
+  });
 
   $('#c').bind('click', function() {
     var isStart = $('#c').prop('checked');
@@ -30,15 +41,15 @@ var Jin = function() {
     }
   });
 
-  socket.on('chat message', function(data){
-    var msg = data.split('#');
+  socket.on('chat message', function(msg){
+    // var msg = data.split('#');
 
     if(!!cid) {
-      $('#cid'+cid+' code').append(msg[1]+'\n');
+      $('#cid'+cid+' code').append(msg.body+'\n');
 
       applyHighlight();
     } else {
-      $('#messages').append($('<li><img class="profile" src="'+msg[0]+'">'+msg[1]+'</li>'));
+      $('#messages').append($('<li><span class="username">'+msg.username+'</span>'+msg.body+'</li>'));
     }
   });
 };

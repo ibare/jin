@@ -1,0 +1,48 @@
+/** {
+  margin: 0;
+  padding: 0;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*/
+body {
+  color: #444;
+  background: #fff;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.container {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -100px;
+}
+
+.sticky {
+  height: 100px;
+}
+
+footer {
+  background-color: #208e4e;
+  height: 100px;
+}
+
+#chatbox {
+  background-color: #208e4e;
+  border: none;
+  width: 80%;
+  height: 100%;
+  font-size: 34px;
+  color: #fff;
+  padding: 10px;
+}
+
+.username {
+  color: #aaa;
+  margin-right: 10px;
+}

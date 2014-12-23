@@ -1,26 +1,41 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>JIN</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>JIN</title>
 
-    <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/monokai_sublime.css">
-    <script src="/lib/webcomponentsjs/webcomponents.min.js"></script>
-    <link rel="import" href="/components/layout/index.html">
+  <!-- <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- <link href="/lib/flat-ui/dist/css/flat-ui.min.css" rel="stylesheet"> -->
+  <link href="/css/reset.css" rel="stylesheet">
+  <link href="/css/default.css" rel="stylesheet">
 
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="/js/protocol.js"></script>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-    </style>
-  </head>
-  <body>
-    <jin-layout></jin-layout>
-  </body>
+  <!-- <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/monokai_sublime.css"> -->
+  <link rel="stylesheet" href="/lib/highlightjs/styles/monokai.css">
+  <link rel="import" href="/components/layout/index.html">
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+  <!--[if lt IE 9]>
+    <script src="/lib/html5shiv/dist/html5shiv.js"></script>
+    <script src="/lib/respond/dest/respond.min.js"></script>
+  <![endif]-->
+
+  <script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/highlightjs/highlight.pack.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/js/protocol.js"></script>
+  <script type="text/javascript" src="/js/jin.js"></script>
+</head>
+<body>
+  <div class="container">
+    <ul id="messages"></ul>
+    <div class="sticky"></div>
+  </div>
+  <footer>
+    <input type="checkbox" id="c">
+    <input type="text" id="chatbox" placeholder="무슨 말을 하고 싶은가요?">
+
+  </footer>
+</body>
 </html>
