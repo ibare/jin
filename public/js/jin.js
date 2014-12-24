@@ -1,12 +1,12 @@
 var Jin = function() {
-  var socket = io();
-  var nickname = prompt('이름이 뭐요?');
-  var cid = 0;
-  var applyHighlight = function() {
-    $('#cid'+cid).each(function(i, block) {
-      hljs.highlightBlock(block);
-    });
-  }
+  var socket = io(),
+      nickname = prompt('이름이 뭐요?'),
+      msg, cid = 0,
+      applyHighlight = function() {
+        $('#cid'+cid).each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+      };
 
   Protocol.defineMessage('chat', {
     username: String,
@@ -15,20 +15,33 @@ var Jin = function() {
     body: String
   });
 
-  $('#chatbox').change(function() {
-    var msg = Protocol.chat();
+  msg = Protocol.chat();
+  msg.username = nickname;
 
-    msg.type = Protocol.chat.MESSAGE;
-    msg.username = nickname;
-    msg.body = $('#chatbox').val();
+  $('#chatbox').change(function() {
+    if($('#codemode').prop('checked')) {
+      msg.type = Protocol.chat.MESSAGE;
+      msg.body = $('#chatbox').val();
+
+      socket.emit('chat message', msg);
+    }
 
     $('#chatbox').val('');
+  });
+
+  $('#chatbox').bind('keypress', function(event) {
+    if(!$('#codemode').prop('checked')) return;
+
+    msg.type = Protocol.chat.CODE;
+    msg.body = event.key;
 
     socket.emit('chat message', msg);
   });
 
-  $('#c').bind('click', function() {
-    var isStart = $('#c').prop('checked');
+  $('#chatbox').focus();
+
+  $('#codemode').bind('click', function() {
+    var isStart = $('#codemode').prop('checked');
 
     if(isStart) {
       cid = Date.now();
@@ -41,15 +54,12 @@ var Jin = function() {
     }
   });
 
-  socket.on('chat message', function(msg){
-    // var msg = data.split('#');
-
+  socket.on('chat message', function(data){
     if(!!cid) {
-      $('#cid'+cid+' code').append(msg.body+'\n');
-
+      $('#cid'+cid+' code').append(data.body);
       applyHighlight();
     } else {
-      $('#messages').append($('<li><span class="username">'+msg.username+'</span>'+msg.body+'</li>'));
+      $('#messages').append($('<li><span class="username">'+data.username+'</span>'+data.body+'</li>'));
     }
   });
 };
