@@ -18,6 +18,8 @@
     "bootstrap": "~3.3.1",
     "html5shiv": "~3.7.2",
     "respond": "~1.4.2",
-    "highlightjs": "~8.4.0"
+    "highlightjs": "~8.4.0",
+    "KeyboardJS": "~0.4.2",
+    "codemirror": "~4.9.0"
   }
 }

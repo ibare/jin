@@ -13,8 +13,10 @@
   <link href="/css/default.css" rel="stylesheet">
 
   <!-- <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/monokai_sublime.css"> -->
-  <link rel="stylesheet" href="/lib/highlightjs/styles/monokai.css">
-  <link rel="import" href="/components/layout/index.html">
+  <!-- <link rel="stylesheet" href="/lib/highlightjs/styles/monokai.css"> -->
+  <link rel="stylesheet" href="/lib/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="/lib/codemirror/theme/tomorrow-night-eighties.css">
+  <!-- <link rel="import" href="/components/layout/index.html"> -->
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
   <!--[if lt IE 9]>
     <script src="/lib/html5shiv/dist/html5shiv.js"></script>
@@ -22,20 +24,22 @@
   <![endif]-->
 
   <script type="text/javascript" src="/lib/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/KeyboardJS/keyboard.js"></script>
   <script type="text/javascript" src="/lib/highlightjs/highlight.pack.js"></script>
+  <script type="text/javascript" src="/lib/codemirror/lib/codemirror.js"></script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="/js/protocol.js"></script>
   <script type="text/javascript" src="/js/jin.js"></script>
 </head>
 <body>
+  <div class="codemode off">CODE</div>
   <div class="container">
     <ul id="messages"></ul>
     <div class="sticky"></div>
   </div>
   <footer>
-    <input type="checkbox" id="codemode">
     <input type="text" id="chatbox">
-
+    <textarea id="codebox"></textarea>
   </footer>
 </body>
 </html>

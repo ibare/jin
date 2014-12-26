@@ -13,6 +13,11 @@ io.on('connection', function(socket){
     console.log(msg);
     io.emit('chat message', msg);
   });
+
+  socket.on('code status', function(data){
+    console.log(data);
+    io.emit('code status', data);
+  });
 });
 
 http.listen(process.env.PORT || 8080, function() {
