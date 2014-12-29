@@ -1,16 +1,25 @@
+function execCode(cid) {
+
+}
+
 var Jin = function() {
   var socket = io(),
       nickname = prompt('이름이 뭐요?'),
-      editors = [],
+      editors = {},
       msg, cid = 0,
 
       changeCodeMode = function() {
         if(cid == 0) {
-          socket.emit('code status', { username: nickname, status: 'start', id: Date.now() });
-          // applyHighlight();
+          socket.emit('code status', { username: nickname, status: 'start', cid: Date.now() });
         } else {
-          socket.emit('code status', { username: nickname, status: 'end', id: cid });
+          socket.emit('code status', { username: nickname, status: 'end', cid: cid });
         }
+      },
+
+      runCode = function() {
+        var editorid = $(this).attr('data-id');
+
+        socket.emit('exec code', { cid: editorid , body: editors['cid'+editorid].getValue() });
       };
 
   Protocol.defineMessage('chat', {
@@ -33,9 +42,9 @@ var Jin = function() {
     }
   });
 
-  $('#codebox').bind('keypress', function(event) {
+  $('#codebox').bind('keyup', function(event) {
     msg.type = Protocol.chat.CODE;
-    msg.body = !!event.keyCode && event.keyCode > 32  ? $('#codebox').val()+event.key : $('#codebox').val();
+    msg.body = $('#codebox').val();
     msg.cid = cid;
 
     socket.emit('chat message', msg);
@@ -46,8 +55,7 @@ var Jin = function() {
 
   socket.on('chat message', function(data){
     if(!!data.cid) {
-      editors['cid'+cid].setValue(data.body);
-      // applyHighlight();
+      editors['cid'+data.cid].setValue(data.body);
     } else {
       $('#chatbox').val('');
       $('#messages').append($('<li><span class="username">'+data.username+'</span>'+data.body+'</li>'));
@@ -63,15 +71,20 @@ var Jin = function() {
         $('.codemode').removeClass('off').addClass('on');
         $('#chatbox').hide();
         $('#codebox').show().focus();
-        cid = data.id;
+        cid = data.cid;
       }
 
-      $('#messages').append($('<li><div id="cid'+data.id+'" class="editor"></div>'));
-      editors['cid'+data.id] = CodeMirror(document.getElementById('cid'+data.id), {
+      var tmpl = $("#code-template").html();
+
+      $('#messages').append($( Mustache.render(tmpl, { owner: data.username, editorid: data.cid }) ));
+
+      editors['cid'+data.cid] = CodeMirror(document.getElementById('cid'+data.cid), {
         lineNumbers: true,
         matchBrackets: true,
         readOnly: true
       });
+
+      $('#box'+data.cid+' .code-run').bind('click', runCode);
     } else {
       if(data.username == nickname) {
         $('.codemode').removeClass('on').addClass('off');
@@ -81,6 +94,11 @@ var Jin = function() {
         cid = 0;
       }
     }
+  });
+
+  socket.on('exec code', function(data) {
+    $('#box'+data.cid+' .output pre').text(data.body);
+    $('#box'+data.cid+' .output').show();
   });
 };
 

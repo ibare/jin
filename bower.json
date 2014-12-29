@@ -20,6 +20,9 @@
     "respond": "~1.4.2",
     "highlightjs": "~8.4.0",
     "KeyboardJS": "~0.4.2",
-    "codemirror": "~4.9.0"
+    "codemirror": "~4.9.0",
+    "lodash": "~2.4.1",
+    "handlebars": "~2.0.0",
+    "mustache": "~0.8.2"
   }
 }
